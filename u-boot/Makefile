@@ -648,6 +648,22 @@ wr841n_v9_config : unconfig ap143_common_config
 
 	@./mkconfig -a ap143 mips mips ap143 ar7240 ar7240
 
+ts-nav4_config : unconfig hornet_common_config
+	@echo '======= Configuring for TouchStar Nav4 at:' `date` '======='
+	@echo "#define CONFIG_FOR_TS_NAV4                   1" >> include/config.h
+
+	#@echo "#define GPIO_WLAN_LED_BIT                    0" >> include/config.h
+	#@echo "#define GPIO_WLAN_LED_ON                     1" >> include/config.h
+	#@echo "#define GPIO_RST_BUTTON_BIT                 11" >> include/config.h
+	# RST button pulled down, so it is active at high
+	#@echo "#define GPIO_RST_BUTTON_IS_ACTIVE_LOW        1" >> include/config.h
+	@echo "#define CONFIG_GPIO_RESET_BTN               11" >> include/config.h
+
+	@echo "#define CONFIG_DEFAULT_FLASH_SIZE_IN_MB     16" >> include/config.h	
+	@echo "#define CONFIG_BOARD_CUSTOM_STRING          \"TouchStar Nav-E-Gate 4 v1\"" >> include/config.h
+	
+	@./mkconfig -a ap121 mips mips ap121 ar7240 ar7240
+
 #########################################################################
 #########################################################################
 #########################################################################

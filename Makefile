@@ -294,6 +294,17 @@ wallys_dr531:
 	@cd $(BUILD_TOPDIR)/u-boot/ && $(MAKECMD) ENDIANNESS=-EB V=1 all
 	@make --no-print-directory show_size
 
+ts-nav4:	export UBOOT_FILE_NAME=uboot_for_ts-nav4
+ts-nav4:	export CONFIG_MAX_UBOOT_SIZE_KB=256
+#ifndef CONFIG_SKIP_LOWLEVEL_INIT
+ts-nav4:	export COMPRESSED_UBOOT=1
+#endif
+#ts_nav4:	export DEVICE_VENDOR=touchstar
+ts-nav4:
+	@cd $(BUILD_TOPDIR)/u-boot/ && $(MAKECMD) ts-nav4_config
+	@cd $(BUILD_TOPDIR)/u-boot/ && $(MAKECMD) ENDIANNESS=-EB V=1 all
+	@make --no-print-directory show_size
+
 ifdef CONFIG_SKIP_LOWLEVEL_INIT
   ifdef DISABLE_CONSOLE_OUTPUT
 show_size:	export UBOOT_FILE_NAME_SUFFIX=__SILENT-CONSOLE__RAM
