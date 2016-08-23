@@ -192,7 +192,8 @@
 
 	/* Outputs, inputs */
 	#define CONFIG_QCA_GPIO_MASK_OUTPUTS			(CONFIG_QCA_GPIO_MASK_LEDS_ACTIVE_LO | GPIO0)	// 'DTLED | 'USBRESET
-	#define CONFIG_QCA_GPIO_MASK_INPUTS				(GPIO12 | GPIO26)								// 'RST | 'WPS
+	#define CONFIG_QCA_GPIO_MASK_INPUTS				(GPIO11 | GPIO12 | GPIO17 | GPIO26)				// 'RST | WPS | SPIDI | SDA 
+																									// Note: (GPIO12 must be low on BOOTSTRAP)
 
 	/* Initial states */
 	#define CONFIG_QCA_GPIO_MASK_OUTPUTS_INIT_HI	CONFIG_QCA_GPIO_MASK_LEDS_ACTIVE_LO	| GPIO0
