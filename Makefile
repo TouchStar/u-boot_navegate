@@ -1,7 +1,35 @@
+SHELL = bash
+
+HOSTARCH := $(shell uname -m | \
+	sed -e s/i.86/i386/ \
+	    -e s/sun4u/sparc64/ \
+	    -e s/arm.*/arm/ \
+	    -e s/sa110/arm/ \
+	    -e s/powerpc/ppc/ \
+	    -e s/macppc/ppc/)
+
+HOSTOS := $(shell uname -s | tr '[:upper:]' '[:lower:]' | \
+	    sed -e 's/\(cygwin\).*/cygwin/')
+
+ifneq ($(HOSTOS), darwin) 
+ifneq ($(HOSTOS), linux)
+$(error Error! Unsupported Host Operating System $(HOSTOS) - $(HOSTARCH)!)
+endif
+endif
+
 export BUILD_TOPDIR=$(PWD)
 export STAGING_DIR=$(BUILD_TOPDIR)/tmp
 
-export MAKECMD=make --silent ARCH=mips CROSS_COMPILE=mips-linux-gnu-
+# -------------------------------------------------------------------------
+# Place the location to your toolchain here, for example: -
+#
+export TOOLCHAIN_DIR=/Users/davidthornley/devr/tools/darwin/toolchain-mips_34kc_gcc-4.8-linaro_uClibc-0.9.33.2
+#export TOOLCHAIN_DIR:=$(BUILD_TOPDIR)/../tools/$(HOSTOS)/toolchain-mips_34kc_gcc-5.3.0_musl-1.1.14
+export PATH:=$(TOOLCHAIN_DIR)/bin:$(PATH)
+# -------------------------------------------------------------------------
+
+#export MAKECMD=make --silent ARCH=mips CROSS_COMPILE=mips-linux-gnu-
+export MAKECMD=make --silent ARCH=mips CROSS_COMPILE=mips-openwrt-linux-
 
 # boot delay (time to autostart boot command)
 export CONFIG_BOOTDELAY=1

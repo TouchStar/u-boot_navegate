@@ -20,6 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA 02111-1307 USA
 #
+SHELL = bash
 
 VERSION			= 1
 PATCHLEVEL		= 1
@@ -191,7 +192,7 @@ $(SUBDIRS):
 		$(MAKE) -C $@ all
 
 ifeq ($(COMPRESSED_UBOOT),1)
-LZMA = $(BUILD_TOPDIR)/host_util/lzma
+LZMA = $(BUILD_TOPDIR)/host_util/$(HOSTOS)-$(HOSTARCH)/lzma
 
 tuboot.bin:	System.map bootstrap.bin u-boot.lzimg	
 		@cat bootstrap.bin > $@
@@ -680,7 +681,7 @@ clobber:	clean
 	@rm -fr *.*~
 	@rm -f u-boot u-boot.map u-boot.hex $(ALL)
 	@rm -f tools/crc32.c tools/environment.c
-	@rm -f cpu/mpc824x/bedbug_603e.c
+	@rm -f cpu/mpc824x/bedbug_603e.c	
 	@rm -f include/asm/proc include/asm/arch include/asm
 
 mrproper \
