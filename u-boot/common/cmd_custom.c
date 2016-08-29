@@ -198,6 +198,7 @@ U_BOOT_CMD(startsc, 1, 0, do_start_sc, "start serial console\n", NULL);
 #endif /* if defined(CONFIG_NETCONSOLE) */
 
 #if defined(CONFIG_FOR_8DEVICES_CARAMBOLA2) || \
+	defined(CONFIG_FOR_TS_VH401) || \
     defined(CONFIG_FOR_DRAGINO_V2)
 /*
  * Erase environment sector

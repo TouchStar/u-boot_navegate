@@ -73,6 +73,7 @@ ulong load_addr = CFG_LOAD_ADDR; /* default load address */
 
 #if !defined(CONFIG_FOR_8DEVICES_CARAMBOLA2) && \
 	!defined(CONFIG_FOR_DLINK_DIR505_A1)     && \
+	!defined(CONFIG_FOR_TS_VH401) && \
 	!defined(CONFIG_FOR_DRAGINO_V2)
 void fake_image_header(image_header_t *hdr, tplink_image_header_t *tpl_hdr){
 	memset(hdr, 0, sizeof(image_header_t));
@@ -101,6 +102,7 @@ int do_bootm(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]){
 	image_header_t *hdr = &header;
 #if !defined(CONFIG_FOR_8DEVICES_CARAMBOLA2) && \
 	!defined(CONFIG_FOR_DLINK_DIR505_A1)     && \
+	!defined(CONFIG_FOR_TS_VH401) && \
 	!defined(CONFIG_FOR_DRAGINO_V2)
 	tplink_image_header_t *fileTag;
 #endif
@@ -115,6 +117,7 @@ int do_bootm(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]){
 
 #if defined(CONFIG_FOR_8DEVICES_CARAMBOLA2) || \
 	defined(CONFIG_FOR_DLINK_DIR505_A1)     || \
+	defined(CONFIG_FOR_TS_VH401) || \
 	defined(CONFIG_FOR_DRAGINO_V2)
 	memmove(&header, (char *)addr, sizeof(image_header_t));
 	print_image_hdr(hdr);
@@ -222,6 +225,7 @@ static void fixup_silent_linux(){
 
 #if defined(CONFIG_FOR_8DEVICES_CARAMBOLA2) || \
 	defined(CONFIG_FOR_DLINK_DIR505_A1)     || \
+	defined(CONFIG_FOR_TS_VH401) || \
 	defined(CONFIG_FOR_DRAGINO_V2)
 static void print_type(image_header_t *hdr){
 	char *os, *arch, *type, *comp;

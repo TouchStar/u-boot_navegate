@@ -203,10 +203,22 @@ dragino_v2_ms14:
 	@cp $(BUILD_TOPDIR)/u-boot/u-boot.bin $(BUILD_TOPDIR)/bin/temp.bin
 	@make show_size
 
+ts-vh401:	export UBOOT_FILE_NAME=uboot_for_ts-vh401
+ts-vh401:	export MAX_UBOOT_SIZE=256	
+#ifndef CONFIG_SKIP_LOWLEVEL_INIT
+ts-vh401:	export COMPRESSED_UBOOT=1
+#endif
+ts_vh401:	export DEVICE_VENDOR=touchstar
+ts-vh401:
+	@cd $(BUILD_TOPDIR)/u-boot/ && $(MAKECMD) ts-vh401_config
+	@cd $(BUILD_TOPDIR)/u-boot/ && $(MAKECMD) ENDIANNESS=-EB V=1 all
+	@cp $(BUILD_TOPDIR)/u-boot/tuboot.bin $(BUILD_TOPDIR)/bin/temp.bin
+	@make show_size
+
 show_size:
 	@echo -e "\n======= Preparing $(MAX_UBOOT_SIZE)KB file filled with 0xFF... ======="
 	@`tr "\000" "\377" < /dev/zero | dd ibs=1k count=$(MAX_UBOOT_SIZE) of=$(BUILD_TOPDIR)/bin/$(UBOOT_FILE_NAME).bin`
-	@echo -e "\n======= Copying U-Boot image... ======="
+	@echo -e "\n======= Copying U-Boot image... ======="	
 	@`dd if=$(BUILD_TOPDIR)/bin/temp.bin of=$(BUILD_TOPDIR)/bin/$(UBOOT_FILE_NAME).bin conv=notrunc`
 	@`rm $(BUILD_TOPDIR)/bin/temp.bin`
 	@echo -e "\n======= U-Boot image ready, size:" `wc -c < $(BUILD_TOPDIR)/bin/$(UBOOT_FILE_NAME).bin`" bytes =======\n"

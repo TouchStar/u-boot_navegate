@@ -513,6 +513,8 @@ int do_protect(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]){
 }
 #endif /* we don't need do_protect cmd */
 
+#endif /* ifndef COMPRESSED_UBOOT */
+
 int flash_sect_protect(int p, ulong addr_first, ulong addr_last){
 	flash_info_t *info;
 	ulong bank;
@@ -548,7 +550,7 @@ int flash_sect_protect(int p, ulong addr_first, ulong addr_last){
 
 	return(rcode);
 }
-#endif /* ifndef COMPRESSED_UBOOT */
+
 
 /**************************************************/
 
