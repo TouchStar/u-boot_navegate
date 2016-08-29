@@ -664,7 +664,7 @@ ts-vh401_config : unconfig hornet_common_config
 	@echo "#define GPIO_SYS_LED_ON                      0" >> include/config.h
 
 	@echo "#define GPIO_RST_BUTTON_BIT                 11" >> include/config.h
-	#@echo "#define GPIO_RST_BUTTON_IS_ACTIVE_LOW        1" >> include/config.h
+	@echo "#define GPIO_RST_BUTTON_IS_ACTIVE_LOW        1" >> include/config.h
 
 	@echo "#define DEFAULT_FLASH_SIZE_IN_MB     	16" >> include/config.h	
 	@echo "#define BOARD_CUSTOM_STRING          \"TouchStar VH401\"" >> include/config.h
