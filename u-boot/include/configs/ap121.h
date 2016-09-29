@@ -154,6 +154,17 @@
 	#define CONFIG_QCA_GPIO_MASK_IN		GPIO11
 	#define CONFIG_QCA_GPIO_MASK_OUT_INIT_H	CONFIG_QCA_GPIO_MASK_LED_ACT_L
 
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+	/* LEDs */	
+	#define CONFIG_QCA_GPIO_MASK_LEDS_ACTIVE_LO		GPIO1
+
+	/* Outputs, inputs */
+	#define CONFIG_QCA_GPIO_MASK_OUTPUTS			(CONFIG_QCA_GPIO_MASK_LEDS_ACTIVE_LO | GPIO0)	// 'DTLED | 'USBRESET
+	#define CONFIG_QCA_GPIO_MASK_INPUTS				(GPIO12 | GPIO26)								// 'RST | 'WPS
+
+	/* Initial states */
+	#define CONFIG_QCA_GPIO_MASK_OUTPUTS_INIT_HI	CONFIG_QCA_GPIO_MASK_LEDS_ACTIVE_LO	| GPIO0
+						
 #endif
 
 /*
@@ -212,6 +223,12 @@
 				"rootfstype=squashfs init=/sbin/init "\
 				"mtdparts=ar7240-nor0:192k(u-boot),64k(u-boot-env),16064k(firmware),64k(art)"
 
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+
+	#define	CONFIG_BOOTARGS "console=ttyS0,115200 root=31:02 "\
+				"rootfstype=squashfs init=/sbin/init "\
+				"mtdparts=ar7240-nor0:256k(u-boot),64k(u-boot-env),16000k(firmware),64k(ART)"
+
 #endif
 
 /*
@@ -228,6 +245,8 @@
 	#define CFG_LOAD_ADDR	0x9F040000
 #elif defined(CONFIG_FOR_BLACK_SWIFT_BOARD)
 	#define CFG_LOAD_ADDR	0x9F030000
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+	#define	CFG_LOAD_ADDR	0x9F050000
 #else
 	#define CFG_LOAD_ADDR	0x9F020000
 #endif
@@ -254,6 +273,10 @@
 	#define CFG_ENV_SECT_SIZE	0x10000
 #elif defined(CONFIG_FOR_BLACK_SWIFT_BOARD)
 	#define CFG_ENV_ADDR		0x9F020000
+	#define CFG_ENV_SIZE		0x8000
+	#define CFG_ENV_SECT_SIZE	0x10000
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+	#define CFG_ENV_ADDR		0x9F040000
 	#define CFG_ENV_SIZE		0x8000
 	#define CFG_ENV_SECT_SIZE	0x10000
 #else
@@ -303,6 +326,14 @@
 	 * #define OFFSET_MAC_ADDRESS		0x000004
 	 * #define OFFSET_MAC_ADDRESS2		0x000016
 	 */
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+    	// Nav4 has 4 MAC addresses at the beginning of ART partition
+	#define OFFSET_MAC_DATA_BLOCK			0xFF0000
+	#define OFFSET_MAC_DATA_BLOCK_LENGTH	0x010000
+	#define OFFSET_MAC_ADDRESS				0x000000
+	#define OFFSET_MAC_ADDRESS2				0x000006
+    #define OFFSET_MAC_ADDRESS3				0x00000C
+    #define OFFSET_MAC_ADDRESS4				0x000012      
 #else
 	#define OFFSET_MAC_DATA_BLOCK		0x010000
 	#define OFFSET_MAC_DATA_BLOCK_LENGTH	0x010000
@@ -315,14 +346,16 @@
     !defined(CONFIG_FOR_DRAGINO_V2)          &&\
     !defined(CONFIG_FOR_MESH_POTATO_V2)      &&\
     !defined(CONFIG_FOR_GL_INET)             &&\
-    !defined(CONFIG_FOR_BLACK_SWIFT_BOARD)
+    !defined(CONFIG_FOR_BLACK_SWIFT_BOARD)   &&\
+    !defined(CONFIG_FOR_TOUCHSTAR_VH401)
 	#define OFFSET_ROUTER_MODEL	0xFD00
 #endif
 
 #if defined(CONFIG_FOR_TPLINK_MR3020_V1) ||\
     defined(CONFIG_FOR_TPLINK_WR740N_V4) ||\
     defined(CONFIG_FOR_TPLINK_MR3220_V2) ||\
-    defined(CONFIG_FOR_TPLINK_WR710N_V1)
+    defined(CONFIG_FOR_TPLINK_WR710N_V1) ||\
+  	defined(CONFIG_FOR_TOUCHSTAR_VH401)
 	#define OFFSET_PIN_NUMBER	0xFE00
 #endif
 
@@ -339,6 +372,15 @@
 
 	#undef  CONFIG_SERVERIP
 	#define CONFIG_SERVERIP	192.168.255.2
+#endif
+
+/* VH401 uses different IP addresses */
+#if defined(CONFIG_FOR_TOUCHSTAR_VH401)
+  	#undef  CONFIG_IPADDR
+ 	#define CONFIG_IPADDR		192.168.228.123
+
+ 	#undef  CONFIG_SERVERIP
+ 	#define CONFIG_SERVERIP		192.168.228.213
 #endif
 
 /* Dragino 2 and Black Swift boards use different prompts */
@@ -380,6 +422,9 @@
 	#define WEBFAILSAFE_UPLOAD_LIMITED_AREA_IN_BYTES	(192 * 1024)
 #elif defined(CONFIG_FOR_BLACK_SWIFT_BOARD)
 	#define WEBFAILSAFE_UPLOAD_LIMITED_AREA_IN_BYTES	(256 * 1024)
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+	// TouchStar VH401: 256k(U-Boot),64k(U-Boot env),64k(ART)
+	#define WEBFAILSAFE_UPLOAD_LIMITED_AREA_IN_BYTES	(384 * 1024)           
 #else
 	#define WEBFAILSAFE_UPLOAD_LIMITED_AREA_IN_BYTES	(192 * 1024)
 #endif
@@ -409,6 +454,11 @@
 	#define CONFIG_QCA_PLL_IN_FLASH_BLOCK_OFFSET	0x30000
 	#define CONFIG_QCA_PLL_IN_FLASH_BLOCK_SIZE	0x10000
 
+#elif defined(CONFIG_FOR_TS_VH401)
+
+	#define CONFIG_QCA_PLL_IN_FLASH_BLOCK_OFFSET	0x40000
+	#define CONFIG_QCA_PLL_IN_FLASH_BLOCK_SIZE	0x10000
+
 #else
 
 	#define CONFIG_QCA_PLL_IN_FLASH_BLOCK_OFFSET	0x10000
@@ -425,7 +475,8 @@
     !defined(CONFIG_FOR_DLINK_DIR505_A1)   &&\
     !defined(CONFIG_FOR_DRAGINO_V2)        &&\
     !defined(CONFIG_FOR_MESH_POTATO_V2)    &&\
-    !defined(CONFIG_FOR_8DEVICES_CARAMBOLA2)
+    !defined(CONFIG_FOR_8DEVICES_CARAMBOLA2) &&\
+    !defined(CONFIG_FOR_TOUCHSTAR_VH401)
 	#define CONFIG_UPG_SCRIPTS_UBOOT_SIZE_BCKP_HEX	0x20000
 #endif
 

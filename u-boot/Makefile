@@ -443,6 +443,11 @@ gl-innovations_gl-inet-6416: ar933x_common
 	@$(call define_add,CONFIG_FOR_GL_INET,1)
 	@$(MKCONFIG) -a ap121 mips mips ap121 ar7240 ar7240
 
+touchstar_vh401: ar933x_common
+	@$(call config_init,TouchStar VH401,ts-vh401,16,11,1,QCA_AR933X_SOC)
+	@$(call define_add,CONFIG_FOR_TOUCHSTAR_VH401,1)
+	@$(MKCONFIG) -a ap121 mips mips ap121 ar7240 ar7240
+
 tp-link_tl-mr10u: ar933x_common
 	@$(call config_init,TP-Link TL-MR10U,tl-mr10u,4,11,,QCA_AR933X_SOC)
 	@$(call define_add,CONFIG_FOR_TPLINK_MR10U_V1,1)
