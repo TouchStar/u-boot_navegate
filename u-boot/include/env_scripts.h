@@ -43,7 +43,7 @@
 	#if (CONFIG_UPG_SCRIPTS_UBOOT_SIZE_BCKP_HEX == \
 	     CONFIG_UPG_SCRIPTS_UBOOT_SIZE_HEX)
 		#define CONFIG_ENV_UPG_SCRIPTS_UBOOT	\
-		"uboot_name=u-boot.bin\0" \
+		"uboot_name=uboot.bin\0" \
 		"uboot_addr=" MK_STR(CONFIG_UPG_SCRIPTS_UBOOT_ADDR_HEX) "\0" \
 		"uboot_size=" MK_STR(CONFIG_UPG_SCRIPTS_UBOOT_SIZE_HEX) "\0" \
 		"uboot_upg=" \
@@ -96,12 +96,13 @@
 	#endif
 
 	#define CONFIG_ENV_UPG_SCRIPTS_FW	\
-		"fw_addr=" MK_STR(CONFIG_UPG_SCRIPTS_FW_ADDR_HEX) "\0" \
-		"fw_upg=" \
+		"firmware_name=firmware.bin\0" \
+		"firmware_addr=" MK_STR(CONFIG_UPG_SCRIPTS_FW_ADDR_HEX) "\0" \
+		"firmware_upg=" \
 			"if ping $serverip; then " \
-				"tftp $loadaddr $bootfile && " \
-				"erase $fw_addr +$filesize && " \
-				"cp.b $loadaddr $fw_addr $filesize && " \
+				"tftp $loadaddr $firmware_name && " \
+				"erase $firmware_addr +$filesize && " \
+				"cp.b $loadaddr $firmware_addr $filesize && " \
 				"echo DONE! Firmware upgraded!; " \
 			"else " \
 				"echo ERROR! $serverip is not reachable!; " \
