@@ -156,6 +156,16 @@
 
 	#define CONFIG_QCA_GPIO_MASK_LED_ACT_L	GPIO27
 
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+	/* LEDs */
+	#define CONFIG_QCA_GPIO_MASK_LED_ACT_L	GPIO1
+
+	/* Outputs, inputs */
+	#define CONFIG_QCA_GPIO_MASK_OUT	(CONFIG_QCA_GPIO_MASK_LED_ACT_L | GPIO0 | GPIO14)	// 'DTLED | 'USBRESET | 'CELLULAR_RESET
+	#define CONFIG_QCA_GPIO_MASK_IN		(GPIO12 | GPIO26)					// 'RST | 'WPS
+
+	/* Initial states */
+	#define CONFIG_QCA_GPIO_MASK_OUT_INIT_H	GPIO0 | GPIO14 | CONFIG_QCA_GPIO_MASK_LED_ACT_L		// 'USBRESET | 'CELLULAR_RESET
 #endif
 
 /*
@@ -243,6 +253,12 @@
 				"rootfstype=squashfs init=/sbin/init "\
 				"mtdparts=ar7240-nor0:128k(u-boot),64k(u-boot-env),16128k(firmware),64k(art)"
 
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+
+	#define	CONFIG_BOOTARGS "console=ttyS0,115200 root=31:02 "\
+				"rootfstype=squashfs init=/sbin/init "\
+				"mtdparts=ar7240-nor0:256k(u-boot),64k(u-boot-env),16000k(firmware),64k(ART)"
+
 #endif
 
 /*
@@ -255,6 +271,7 @@
     defined(CONFIG_FOR_ALFA_NETWORK_HORNET_UB) ||\
     defined(CONFIG_FOR_ALFA_NETWORK_TUBE2H)    ||\
     defined(CONFIG_FOR_CREATCOMM_D3321)        ||\
+    defined(CONFIG_FOR_TOUCHSTAR_VH401)        ||\
     defined(CONFIG_FOR_GLINET_GL_AR150)        ||\
     defined(CONFIG_FOR_GLINET_GL_USB150)
 
@@ -299,6 +316,7 @@
     defined(CONFIG_FOR_ALFA_NETWORK_HORNET_UB) ||\
     defined(CONFIG_FOR_ALFA_NETWORK_TUBE2H)    ||\
     defined(CONFIG_FOR_CREATCOMM_D3321)        ||\
+    defined(CONFIG_FOR_TOUCHSTAR_VH401)        ||\
     defined(CONFIG_FOR_GLINET_GL_AR150)        ||\
     defined(CONFIG_FOR_GLINET_GL_USB150)
 
@@ -359,6 +377,7 @@
     defined(CONFIG_FOR_ALFA_NETWORK_TUBE2H)    ||\
     defined(CONFIG_FOR_CREATCOMM_D3321)        ||\
     defined(CONFIG_FOR_DRAGINO_MS14)           ||\
+    defined(CONFIG_FOR_TOUCHSTAR_VH401)        ||\
     defined(CONFIG_FOR_VILLAGE_TELCO_MP2)
 
 	#define OFFSET_MAC_DATA_BLOCK		0xFF0000
@@ -421,6 +440,7 @@
     !defined(CONFIG_FOR_DRAGINO_MS14)                &&\
     !defined(CONFIG_FOR_GAINSTRONG_OOLITE_V1_DEV)    &&\
     !defined(CONFIG_FOR_GLINET_6416)                 &&\
+    !defined(CONFIG_FOR_TOUCHSTAR_VH401)             &&\
     !defined(CONFIG_FOR_GLINET_GL_AR150)             &&\
     !defined(CONFIG_FOR_GLINET_GL_USB150)            &&\
     !defined(CONFIG_FOR_HAK5_LAN_TURTLE)             &&\
@@ -436,6 +456,7 @@
 #if defined(CONFIG_FOR_TPLINK_MR3020_V1) ||\
     defined(CONFIG_FOR_TPLINK_MR3220_V2) ||\
     defined(CONFIG_FOR_TPLINK_WR710N_V1) ||\
+    defined(CONFIG_FOR_TOUCHSTAR_VH401)  ||\
     defined(CONFIG_FOR_TPLINK_WR740N_V4)
 
 	#define OFFSET_PIN_NUMBER	0xFE00
@@ -471,6 +492,15 @@
 	#undef  CFG_PROMPT
 	#define CFG_PROMPT	"dr_boot> "
 
+#endif
+
+/* VH401 uses different IP addresses */
+#if defined(CONFIG_FOR_TOUCHSTAR_VH401)
+  	#undef  CONFIG_IPADDR
+ 	#define CONFIG_IPADDR		192.168.228.123
+
+ 	#undef  CONFIG_SERVERIP
+ 	#define CONFIG_SERVERIP		192.168.228.213
 #endif
 
 /* D-Link DIR-505 is limited to 64 KB only and doesn't use env */
@@ -528,11 +558,16 @@
 
 	#define WEBFAILSAFE_UPLOAD_LIMITED_AREA_IN_BYTES	(256 * 1024)
 
+#elif defined(CONFIG_FOR_TOUCHSTAR_VH401)
+	// TouchStar VH401: 256k(U-Boot),64k(U-Boot env),64k(ART)
+	#define WEBFAILSAFE_UPLOAD_LIMITED_AREA_IN_BYTES	(384 * 1024)
+
 #else
 
 	#define WEBFAILSAFE_UPLOAD_LIMITED_AREA_IN_BYTES	(192 * 1024)
 
 #endif
+
 
 /*
  * ========================
@@ -546,6 +581,7 @@
     defined(CONFIG_FOR_ALFA_NETWORK_HORNET_UB) ||\
     defined(CONFIG_FOR_ALFA_NETWORK_TUBE2H)    ||\
     defined(CONFIG_FOR_CREATCOMM_D3321)        ||\
+    defined(CONFIG_FOR_TOUCHSTAR_VH401)        ||\
     defined(CONFIG_FOR_GLINET_GL_AR150)        ||\
     defined(CONFIG_FOR_GLINET_GL_USB150)
 
@@ -583,6 +619,7 @@
     !defined(CONFIG_FOR_CREATCOMM_D3321)             &&\
     !defined(CONFIG_FOR_DLINK_DIR505_A1)             &&\
     !defined(CONFIG_FOR_DRAGINO_MS14)                &&\
+    !defined(CONFIG_FOR_TOUCHSTAR_VH401)             &&\
     !defined(CONFIG_FOR_GLINET_GL_AR150)             &&\
     !defined(CONFIG_FOR_GLINET_GL_USB150)            &&\
     !defined(CONFIG_FOR_HAK5_WIFI_PINEAPPLE_NANO)    &&\

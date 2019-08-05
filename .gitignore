@@ -92,3 +92,7 @@ GTAGS
 *.orig
 *~
 \#*#
+# ts scripts
+build
+deploy
+
